@@ -6,8 +6,7 @@ contact_links:
     about: For general debugging or technical support please see the Get Involved section of our readme.
   - name: 📝 Ansible Code of Conduct
     url: https://docs.ansible.com/ansible/latest/community/code_of_conduct.html?utm_medium=github&utm_source=issue_template_chooser
-    about: AWX uses the ansible Code of Conduct: ❤ Be nice to other members of the community. ☮ Behave.
+    about: AWX uses the Ansible Code of Conduct; ❤ Be nice to other members of the community. ☮ Behave.
   - name: 💼 For Enterprise
     url: https://www.ansible.com/products/engine?utm_medium=github&utm_source=issue_template_chooser
     about: Red Hat offers support for the Ansible Automation Platform
-
