@@ -1,5 +1,5 @@
 ---
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
   - name: 📝 Ansible Code of Conduct
     url: https://docs.ansible.com/ansible/latest/community/code_of_conduct.html?utm_medium=github&utm_source=issue_template_chooser

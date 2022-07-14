@@ -7,31 +7,31 @@ assignees: ''
 
 ---
 
-**Description**
+##### Description
 <!-- Briefly describe the feature being asked for. -->
 
-**Documentation Guide Affected**
+##### Documentation Guide Affected
 <!-- Select one or more documents -->
-[ ] Administraton
-[ ] User Guide
-[ ] API Swagger
-[ ] Other
+- [ ] Administraton
+- [ ] User Guide
+- [ ] API Swagger
+- [ ] Other
 
-**Documentation Section**
+##### Documentation Section
 <!-- if the feature is part of an existing section enter that here -->
 
-**Documentation Version**
+##### Documentation Version
 <!-- Specify the version of the documentation this affects -->
 
-**Related Problem**
+##### Related Problem
 <!-- Is your feature request realted to a problem? -->
 <!-- If there are related issues or pulls to the feature link them here. -->
 
-**Describe the solution you'd like**
+##### Describe the solution you'd like
 <!-- A clear and concise description of what you want to happen. -->
 
-**Describe alternatives you've considered**
+##### Describe alternatives you've considered
 <!-- A clear and concise description of any alternative solutions or features you've considered. -->
 
-**Additional context**
+##### Additional context
 <!-- Add any other context or screenshots about the feature request here. -->
