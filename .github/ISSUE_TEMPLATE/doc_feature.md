@@ -1,5 +1,5 @@
 ---
-name: New Feature Documentation Change
+name: New Feature Documentation
 about: Suggest a new section or a new feature for documentation
 title: ''
 labels: ''
