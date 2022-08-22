@@ -26,7 +26,7 @@ jobs:
         id: check_user
         with:
           env:
-            REPO_OWNER: ${{ toJson(github).event.repository_owner }}
+            REPO_OWNER: ${{ toJson(github.event.repository_owner) }}
           script: |
             import requests
             from os import env
