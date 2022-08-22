@@ -18,24 +18,21 @@ jobs:
         run: pip install requests
       - name: Dump GitHub context
         env:
-          GITHUB_CONTEXT: ${{ toJson(github.event) }}
+          REPO_OWNER: ${{ toJson(github.event.repository_owner) }}
+          ISSUE_NUMBER: ${{ toJson(github.event.issue.number) }}
         run: |
-          echo "$GITHUB_CONTEXT"
+          echo "$REPO_OWNER"
+          echo "$ISSUE_NUMBER"
 #      - name: Add community label if user is from the community
 #        uses: jannekem/run-python-script-action@v1
 #        id: check_user
 #        with:
-#          env:
-#            REPO_OWNER: ${{ toJson(github.event.repository_owner) }}
 #          script: |
 #            import requests
-#            from os import env
-#            repo_owner = env['REPO_OWNER']
-#            print(repo_owner)
 #            headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
-#            response = requests.get('https://api.github.com/orgs/${{ github.event.repository_owner }}/repos?type=private', headers=headers)
+#            response = requests.get('https://api.github.com/orgs/${{ toJson(github.event.eepository_owner) }}/repos?type=private', headers=headers)
 #            if len(response.json()) > 0:
 #                print("ansible member")
 #            else:
 #                print("community member")
-#                requests.post('https://api.github.com/repos/${{ github.event.repository }}/issues/${{ github.event.issue.number }}/labels', json={"labels":["community"]}, headers=headers)
+#                requests.post('https://api.github.com/repos/${{ toJson(github.event.repository) }}/issues/${{ toJson(github.event.issue.number) }}/labels', json={"labels":["community"]}, headers=headers)
