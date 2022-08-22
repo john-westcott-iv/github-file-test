@@ -26,11 +26,11 @@ jobs:
             response = requests.get('${{ fromJson(toJson(github.event.issue.user.url)) }}/orgs?per_page=100', headers=headers)
             for org in response.json():
               if org['login'] == 'ansible':
-                set_output('is_org_member', "True")
-            set_output('is_org_member', "False")
+                set_output('is_org_member', "true")
+            set_output('is_org_member', "false")
       - name: Add community if not a member
         if: |
-          steps.check_user.outputs.is_org_member == false
+          'steps.check_user.outputs.is_org_member == "false"'
         uses: andymckay/labeler@e6c4322d0397f3240f0e7e30a33b5c5df2d39e90
         with:
           add-labels: "community"
