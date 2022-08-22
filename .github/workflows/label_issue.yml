@@ -21,17 +21,18 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
-      - name: See if the user is a community member
+      - name: Add community label if user is from the community
         uses: jannekem/run-python-script-action@v1
         id: check_user
         with:
           script: |
             import requests
-            print(${{ github.event }})
-            user_token = '${{ secrets.GITHUB_TOKEN }}'
-            response = requests.get('https://api.github.com/orgs/ansible/repos?type=private', headers={'Accept': 'application/vnd.github+json', 'Authorization': 'token {}'.format(user_token)})
+            print('${{ github.event.repository_owner }}')
+            print('${{ github.event.number }}')
+            headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
+            response = requests.get('https://api.github.com/orgs/${{ github.event.repository_owner }}/repos?type=private', headers=headers)
             if len(response.json()) > 0:
                 print("ansible member")
             else:
                 print("community member")
-                response = requests.post('https://api.github.com/repos/ansible/awx/issues/{issue_number}/labels', json={"labels":["community"]}, headers={'Accept': 'application/vnd.github+json', 'Authorization': 'token {}'.format(user_token)})
+                requests.post('https://api.github.com/repos/${{ github.event.repository }}/issues/${{ github.event.issue.number }}/labels', json={"labels":["community"]}, headers=headers)
