@@ -29,7 +29,7 @@ jobs:
             import requests
             headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
             response = requests.get('https://api.github.com/orgs/ansible/memberships/john-westcott-iv', headers=headers)
-            print(response.json)
+            print(response.json())
 
 #            response = requests.get('https://api.github.com/orgs/ansible/repos?type=private', headers=headers)
 #            if len(response.json()) > 0:
