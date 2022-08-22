@@ -12,16 +12,10 @@ jobs:
     name: Label Issue - Community
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v4
-      - name: Install python requests
-        run: pip install requests
-      - name: Dump GitHub context
-        env:
-          EVENT: ${{ fromJson(toJson(github.event.issue.url)) }}
-        run: |
-          echo "$EVENT"
-
+#      - uses: actions/checkout@v2
+#      - uses: actions/setup-python@v4
+#      - name: Install python requests
+#        run: pip install requests
       - name: Check if organization member
         id: is_organization_member
         uses: JamesSingleton/is-organization-member@1.0.0
@@ -29,10 +23,14 @@ jobs:
           organization: ansible
           username: ${{ github.event.issue.user.login }}
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create Comment
+      - name: Add community if not a member
         if: |
           steps.is_organization_member.outputs.result == false
-        run: echo User Does Not Belong to ansible
+        uses: andymckay/labeler@e6c4322d0397f3240f0e7e30a33b5c5df2d39e90
+        with:
+          add-labels: "community"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
 
 #      - name: Add community label if user is from the community
 #        uses: jannekem/run-python-script-action@v1
