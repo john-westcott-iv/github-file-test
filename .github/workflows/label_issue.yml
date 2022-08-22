@@ -30,7 +30,7 @@ jobs:
             set_output('is_org_member', "False")
       - name: Add community if not a member
         if: |
-          steps.check_user.outputs.is_org_member == "false"
+          steps.check_user.outputs.is_org_member == False
         uses: andymckay/labeler@e6c4322d0397f3240f0e7e30a33b5c5df2d39e90
         with:
           add-labels: "community"
