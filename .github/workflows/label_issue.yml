@@ -19,7 +19,7 @@ jobs:
       - name: Check if user is a member of Ansible org
         uses: jannekem/run-python-script-action@v1
         id: check_user
-        wish:
+        with:
           script: |
             import requests
             headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
