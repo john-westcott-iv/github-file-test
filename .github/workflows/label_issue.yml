@@ -12,29 +12,30 @@ jobs:
     name: Label Issue - Community
 
     steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-python@v4
-#      - name: Install python requests
-#        run: pip install requests
-      - name: Check if organization member
-        id: is_organization_member
-        uses: JamesSingleton/is-organization-member@1.0.0
-        with:
-          organization: ansible
-          username: ${{ github.event.issue.user.login }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
+      - name: Install python requests
+        run: pip install requests
+      - name: Check if user is a member of Ansible org
+        uses: jannekem/run-python-script-action@v1
+        id: check_user
+        wish:
+          script: |
+            import requests
+            headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
+            response = requests.get('${{ fromJson(toJson(github.event.issue.user.url)) }}/orgs?per_page=100', headers=headers)
+            for org in response.json():
+              if org['login'] == 'ansible':
+                set_output('is_org_member', True)
+            set_output('is_org_member', False)
       - name: Add community if not a member
         if: |
-          steps.is_organization_member.outputs.result == false
+          steps.check_user.outputs.is_org_member == false
         uses: andymckay/labeler@e6c4322d0397f3240f0e7e30a33b5c5df2d39e90
         with:
           add-labels: "community"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-
 #      - name: Add community label if user is from the community
-#        uses: jannekem/run-python-script-action@v1
-#        id: check_user
 #        with:
 #          script: |
 #            import requests
