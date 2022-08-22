@@ -26,7 +26,7 @@ jobs:
                 print("community member")
 
       - name: Apply community tag if not
-        if: "container(steps.script.outputs.stdout, 'community member')"
+        if: "contains(steps.script.outputs.stdout, 'community member')"
         uses: github/issue-labeler@v2.4.1
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
