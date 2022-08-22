@@ -18,16 +18,20 @@ jobs:
         run: pip install requests
       - name: Dump GitHub context
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
+          GITHUB_CONTEXT: ${{ toJson(github.event) }}
         run: |
           echo "$GITHUB_CONTEXT"
       - name: Add community label if user is from the community
         uses: jannekem/run-python-script-action@v1
         id: check_user
         with:
+          env:
+            REPO_OWNER: ${{ toJson(github).event.repository_owner }}
           script: |
             import requests
-            repo_owner = '${{ toJson(github).event.repository_owner }}'
+            from os import env
+            repo_owner = env['REPO_OWNER']
+            print(repo_owner)
             headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
             response = requests.get('https://api.github.com/orgs/${{ github.event.repository_owner }}/repos?type=private', headers=headers)
             if len(response.json()) > 0:
