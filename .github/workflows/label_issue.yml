@@ -18,6 +18,7 @@ jobs:
         run: pip install requests
       - name: See if the user is a community member
         uses: jannekem/run-python-script-action@v1
+        id: check_user
         with:
           script: |
             import requests
@@ -29,7 +30,7 @@ jobs:
                 print("community member")
 
       - name: Apply community tag if not
-        if: "contains(steps.script.outputs.stdout, 'community member')"
+        if: "contains(steps.check_user.outputs.stdout, 'community member')"
         uses: github/issue-labeler@v2.4.1
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
