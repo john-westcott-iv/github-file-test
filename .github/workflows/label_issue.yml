@@ -18,7 +18,7 @@ jobs:
         run: pip install requests
       - name: Dump GitHub context
         env:
-          EVENT: ${{ toJson(github.event.issue.url) }}
+          EVENT: ${{ fromJson(toJson(github.event.issue.url)) }}
         run: |
           echo "$EVENT"
       - name: Add community label if user is from the community
@@ -33,4 +33,4 @@ jobs:
                 print("ansible member")
             else:
                 print("community member")
-                requests.post('${{ fromJson(github.event.issue.url) }}/labels', json={"labels":["community"]}, headers=headers)
+                requests.post('${{ fromJson(toJson(github.event.issue.url)) }}/labels', json={"labels":["community"]}, headers=headers)
