@@ -27,7 +27,7 @@ jobs:
         with:
           script: |
             import requests
-            event = json.loads('${{ toJson(github) }}')
+            repo_owner = json.loads('${{ toJson(github).event.repository_owner }}')
             print(event)
             headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
             response = requests.get('https://api.github.com/orgs/${{ github.event.repository_owner }}/repos?type=private', headers=headers)
