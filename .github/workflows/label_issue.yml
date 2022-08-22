@@ -21,19 +21,32 @@ jobs:
           EVENT: ${{ fromJson(toJson(github.event.issue.url)) }}
         run: |
           echo "$EVENT"
-      - name: Add community label if user is from the community
-        uses: jannekem/run-python-script-action@v1
-        id: check_user
-        with:
-          script: |
-            import requests
-            headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
-            response = requests.get('https://api.github.com/orgs/ansible/memberships/john-westcott-iv', headers=headers)
-            print(response.json())
 
-#            response = requests.get('https://api.github.com/orgs/ansible/repos?type=private', headers=headers)
-#            if len(response.json()) > 0:
-#                print("ansible member")
-#            else:
-#                print("community member")
-#                requests.post('${{ fromJson(toJson(github.event.issue.url)) }}/labels', json={"labels":["community"]}, headers=headers)
+      - name: Check if organization member
+        id: is_organization_member
+        uses: jamessingleton/is-organization-member@v1
+        with:
+          organization: ansible
+          username: ${{ github.event.issue.user.login }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Comment
+        if: |
+          steps.is_organization_member.outputs.result == false
+        run: echo User Does Not Belong to ansible
+
+#      - name: Add community label if user is from the community
+#        uses: jannekem/run-python-script-action@v1
+#        id: check_user
+#        with:
+#          script: |
+#            import requests
+#            headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
+#            response = requests.get('https://api.github.com/orgs/ansible/memberships/john-westcott-iv', headers=headers)
+#            print(response.json())
+#
+##            response = requests.get('https://api.github.com/orgs/ansible/repos?type=private', headers=headers)
+##            if len(response.json()) > 0:
+##                print("ansible member")
+##            else:
+##                print("community member")
+##                requests.post('${{ fromJson(toJson(github.event.issue.url)) }}/labels', json={"labels":["community"]}, headers=headers)
