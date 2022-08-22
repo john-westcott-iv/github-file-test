@@ -24,10 +24,16 @@ jobs:
             import requests
             headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
             response = requests.get('${{ fromJson(toJson(github.event.issue.user.url)) }}/orgs?per_page=100', headers=headers)
+            is_member = False
             for org in response.json():
               if org['login'] == 'ansible':
+                is_member = True
+            if is_member:
+                print("User is member")
                 set_output('is_org_member', "true")
-            set_output('is_org_member', "false")
+            else:
+                print("User is community")
+                set_output('is_org_member', "false")
       - name: Add community if not a member
         if: |
           'steps.check_user.outputs.is_org_member == "false"'
