@@ -33,4 +33,4 @@ jobs:
                 print("ansible member")
             else:
                 print("community member")
-                requests.post('${{ toJson(github.event.issue.url) }}/labels', json={"labels":["community"]}, headers=headers)
+                requests.post('${{ fromJson(github.event.issue.url) }}/labels', json={"labels":["community"]}, headers=headers)
