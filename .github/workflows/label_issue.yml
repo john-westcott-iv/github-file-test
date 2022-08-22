@@ -1,0 +1,37 @@
+name: Community Label Issue
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    name: Label Issue - Community
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - name: See if the user is a community member
+        uses: jannekem/run-python-script-action@v1
+        with:
+          script: |
+            import requests
+            user_token = '${{ secrets.GITHUB_TOKEN }}'
+            response = requests.get('https://api.github.com/orgs/ansible/repos?type=private', headers={'Accept': 'application/vnd.github+json', 'Authorization': 'token {}'.format(user_token)})
+            if len(response.json()) > 0:
+                print("ansible member")
+            else:
+                print("community member")
+
+      - name: Apply community tag if not
+        if: "container(steps.script.outputs.stdout, 'community member')"
+        uses: github/issue-labeler@v2.4.1
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          not-before: 2021-12-07T07:00:00Z
+          configuration-path: .github/community_issue_labeler.yml
+          enable-versioned-regex: 0
+
+
