@@ -1,0 +1,35 @@
+---
+name: Upload API Schema
+on:
+  create:
+    branches:
+      - release_**
+jobs:
+  lock_dev_deeps:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get python version from Makefile
+        run: echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
+
+      - name: Install python ${{ env.py_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.py_version }}
+
+      - name: Install required dependencies
+        run: pip install -r ./requirements/requirements_dev.txt
+
+      - name: Create versioned requirements file
+        run: pip freeze > ./requirements/requirements_dev.txt
+
+      - name: Commit locked requirements
+        run: |
+          git config --global user.name 'AWX Auto-Locker'
+          git config --global user.email 'john.westcott.iv@redhat.com'
+          git commit -am "Auto-locking requirements_dev.txt"
+          git push
