@@ -28,8 +28,10 @@ jobs:
         run: pip freeze > ./requirements/requirements_dev.txt
 
       - name: Commit locked requirements
-        run: |
-          git config --global user.name 'AWX Auto-Locker'
-          git config --global user.email 'john.westcott.iv@redhat.com'
-          git commit -am "Auto-locking requirements_dev.txt"
-          git push
+        uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        with:
+          add: './requirements/requirements_dev.txt'
+          default_author: github_actions
+          message: 'Auto-generating locked dev requirements'
+          pathspec_error_handling: exitImmediately
+          push: true
