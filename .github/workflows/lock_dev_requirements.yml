@@ -6,6 +6,7 @@ on:
       - release_**
 jobs:
   lock_dev_deeps:
+    if: ${{ contains(github.ref, 'refs/heads/release_') }}
     runs-on: ubuntu-latest
     permissions:
       packages: write
