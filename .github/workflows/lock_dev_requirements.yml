@@ -26,7 +26,11 @@ jobs:
         run: pip install --no-deps -r ./requirements/requirements_dev.txt
 
       - name: Create versioned requirements file
-        run: pip freeze > ./requirements/requirements_dev.txt
+        run: pip freeze > ./requirements/locked_requirements_dev.txt
+
+      - name: Make locked version of requrements_dev.txt
+        working-directory: requirements
+        run: .github/lock_dev_requirements.py
 
       - name: Commit locked requirements
         run: |
