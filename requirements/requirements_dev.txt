@@ -1,26 +1,26 @@
-build==0.8.0
+build
 django-debug-toolbar==3.2.4
-django-rest-swagger==2.2.0
+django-rest-swagger
 # pprofile - re-add once https://github.com/vpelletier/pprofile/issues/41 is addressed
-ipython==8.5.0 # https://github.com/ansible/awx/security/dependabot/30
-unittest2==1.1.0
-black==22.10.0
-pytest==7.1.3
-pytest-cov==4.0.0
-pytest-django==4.5.2
-pytest-pythonpath==0.7.4
+ipython>=7.31.1 # https://github.com/ansible/awx/security/dependabot/30
+unittest2
+black
+pytest!=7.0.0
+pytest-cov
+pytest-django
+pytest-pythonpath
 pytest-mock==1.11.1
-pytest-timeout==2.1.0
+pytest-timeout
 pytest-xdist==1.34.0 # 2.0.0 broke zuul for some reason
-tox==3.26.0 # for awxkit
-logutils==0.3.5
-jupyter==1.0.0
+tox  # for awxkit
+logutils
+jupyter
 # matplotlib - Caused issues when bumping to setuptools 58
-backports.tempfile==1.0 # support in unit tests for py32+ tempfile.TemporaryDirectory
+backports.tempfile  # support in unit tests for py32+ tempfile.TemporaryDirectory
 git+https://github.com/artefactual-labs/mockldap.git@master#egg=mockldap
-sdb==1.8
-remote-pdb==2.1.0
-gprof2dot==2022.7.29
+sdb
+remote-pdb
+gprof2dot
 atomicwrites==1.4.0
-flake8==5.0.4
-yamllint==1.28.0
+flake8
+yamllint
