@@ -30,7 +30,7 @@ jobs:
 
       - name: Make locked version of requrements_dev.txt
         working-directory: requirements
-        run: .github/lock_dev_requirements.py
+        run: ../.github/lock_dev_requirements.py
 
       - name: Commit locked requirements
         run: |
