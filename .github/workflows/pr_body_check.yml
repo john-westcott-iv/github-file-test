@@ -15,9 +15,11 @@ jobs:
     steps:
       - name: Write PR body to a file
         run: |
-          cat >> pr.body << __SOME_RANDOM_PR_EOF__
-          ::escapeData::${{ github.event.pull_request.body }}
-          __SOME_RANDOM_PR_EOF__
+          for line in '${{ github.event.pull_request.body }}`' ; do echo $line >> pr.body; done
+#
+#          cat >> pr.body << __SOME_RANDOM_PR_EOF__
+#          ::escapeData::${{ github.event.pull_request.body }}
+#          __SOME_RANDOM_PR_EOF__
 
       - name: Display the received body for troubleshooting
         run: cat pr.body
