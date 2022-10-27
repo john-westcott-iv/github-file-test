@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Write PR body to a file
         run: |
-          for line in '${{ github.event.pull_request.body }}`' ; do echo $line >> pr.body; done
+          echo '${{ github.event.pull_request.body }}`' >> pr.body
 #
 #          cat >> pr.body << __SOME_RANDOM_PR_EOF__
 #          ::escapeData::${{ github.event.pull_request.body }}
