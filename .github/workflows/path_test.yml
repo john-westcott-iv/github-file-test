@@ -1,0 +1,41 @@
+---
+name: CI Test
+env:
+  BRANCH: ${{ github.base_ref || 'devel' }}
+  LC_ALL: "C.UTF-8" # prevent ERROR: Ansible could not initialize the preferred locale: unsupported locale setting
+on:
+  pull_request:
+  paths:
+    - ${{ matrix.tests.path }}
+jobs:
+  common-tests:
+    name: ${{ matrix.tests.name }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        tests:
+          - name: api-test
+            command: /start_tests.sh
+            label: Run API Tests
+            path: "requirements**"
+          - name: api-lint
+            command: /var/lib/awx/venv/awx/bin/tox -e linters
+            label: Run API Linters
+            path: "SECURITY.md"
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get python version from Makefile
+        run: echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
+
+      - name: Install python ${{ env.py_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.py_version }}
+
+      - name: Say what test we are on
+        run: echo ${{ matrix.tests.label }}
