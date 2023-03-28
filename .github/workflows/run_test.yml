@@ -1,0 +1,18 @@
+---
+name: Try installing jmespath
+
+on:
+  workflow_dispatch:
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          depth: 0
+
+      - name: Release Helm chart
+        run: |
+          pip install jmespath
+          echo "completed"
