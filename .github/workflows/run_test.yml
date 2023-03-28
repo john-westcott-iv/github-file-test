@@ -1,15 +1,8 @@
---
+---
 name: Try installing jmespath
-env:
-  LC_ALL: "C.UTF-8" # prevent ERROR: Ansible could not initialize the preferred locale: unsupported locale setting
 
 on:
   workflow_dispatch:
-    inputs:
-      confirm:
-        description: 'Are you sure? Set this to yes.'
-        required: true
-        default: 'no'
 
 jobs:
   promote:
