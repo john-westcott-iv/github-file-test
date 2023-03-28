@@ -1,7 +1,8 @@
 --
-name: Promote AWX Operator image
+name: Try installing jmespath
 on:
   workflow_dispatch:
+    inputs:
 
 jobs:
   promote:
