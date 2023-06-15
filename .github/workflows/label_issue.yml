@@ -1,4 +1,4 @@
-name: Label Issue
+name: Community Label Issue
 
 on:
   issues:
@@ -9,13 +9,46 @@ on:
 jobs:
   triage:
     runs-on: ubuntu-latest
-    name: Label Issue
+    name: Label Issue - Community
 
     steps:
-      - name: Label Issue
-        uses: github/issue-labeler@v2.4.1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
+      - name: Install python requests
+        run: pip install requests
+      - name: Check if user is a member of Ansible org
+        uses: jannekem/run-python-script-action@v1
+        id: check_user
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          not-before: 2021-12-07T07:00:00Z
-          configuration-path: .github/issue_labeler.yml
-          enable-versioned-regex: 0
+          script: |
+            import requests
+            headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
+            response = requests.get('${{ fromJson(toJson(github.event.issue.user.url)) }}/orgs?per_page=100', headers=headers)
+            is_member = False
+            for org in response.json():
+              if org['login'] == 'ansible':
+                is_member = True
+            if is_member:
+                print("User is member")
+            else:
+                print("User is community")
+      - name: Add community if not a member
+        if: contains(steps.check_user.outputs.stdout, 'community')
+        uses: andymckay/labeler@e6c4322d0397f3240f0e7e30a33b5c5df2d39e90
+        with:
+          add-labels: "community"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Add community label if user is from the community
+#        with:
+#          script: |
+#            import requests
+#            headers = {'Accept': 'application/vnd.github+json', 'Authorization': 'token ${{ secrets.GITHUB_TOKEN }}'}
+#            response = requests.get('https://api.github.com/orgs/ansible/memberships/john-westcott-iv', headers=headers)
+#            print(response.json())
+#
+##            response = requests.get('https://api.github.com/orgs/ansible/repos?type=private', headers=headers)
+##            if len(response.json()) > 0:
+##                print("ansible member")
+##            else:
+##                print("community member")
+##                requests.post('${{ fromJson(toJson(github.event.issue.url)) }}/labels', json={"labels":["community"]}, headers=headers)

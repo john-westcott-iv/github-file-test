@@ -1,0 +1,40 @@
+---
+name: Lock Dev Requirements
+on:
+  create:
+    branches:
+      - release_**
+jobs:
+  lock_dev_deeps:
+    if: ${{ contains(github.ref, 'refs/heads/release_') }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get python version from Makefile
+        run: echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
+
+      - name: Install python ${{ env.py_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.py_version }}
+
+      - name: Install required dependencies
+        run: pip install --no-deps -r ./requirements/requirements_dev.txt
+
+      - name: Create versioned requirements file
+        run: pip freeze > ./requirements/locked_requirements_dev.txt
+
+      - name: Make locked version of requrements_dev.txt
+        working-directory: requirements
+        run: ../.github/lock_dev_requirements.py
+
+      - name: Commit locked requirements
+        run: |
+          git config --global user.name 'AWX Auto-Locker'
+          git config --global user.email 'awx-project@googlegroups.com'
+          git commit -am "Auto-locking requirements_dev.txt"
+          git push
