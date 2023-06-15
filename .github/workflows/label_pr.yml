@@ -7,8 +7,9 @@ on:
       - reopened
       - synchronize
 
-permissions: write-all
-
+permissions:
+  issues: write
+  
 jobs:
   community:
     runs-on: ubuntu-latest
