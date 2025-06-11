@@ -1,0 +1,32 @@
+---
+name: requirements tests
+on:
+  push:
+  pull_request:
+
+jobs:
+  no_requirements_files_allowed:
+    name: Ensure no requirements files are in PR
+    runs-on: ubuntu-latest
+    env:
+      HEADLESS: "yes"
+
+    steps:
+      - name: Get all changed markdown files
+        id: changed-markdown-files
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46
+        with:
+          files: requirements/**
+
+      - name: Fail if there are changed files
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-markdown-files.outputs.all_changed_files }}
+        run: |
+          echo "The following requirements files were attempted to be changed:"
+          for file in ${ALL_CHANGED_FILES}; do
+            echo $file
+          done
+          exit 1
+
+
