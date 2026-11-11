@@ -23,7 +23,7 @@
         url: "{{ item }}"
         method: GET
         follow_redirects: none
-        validate_certs: true
+        validate_certs: false
         return_content: false
         timeout: "{{ url_timeout }}"
         status_code: "{{ reachable_status_codes }}"
