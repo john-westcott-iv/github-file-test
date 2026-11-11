@@ -1,0 +1,40 @@
+---
+- name: Validate outbound URL connectivity
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    urls:
+      - https://www.google.com/
+    url_timeout: 20
+    reachable_status_codes:
+      - 200
+      - 301
+      - 302
+      - 303
+      - 307
+      - 308
+      - 401
+      - 403
+
+  tasks:
+    - name: Check URL reachability
+      ansible.builtin.uri:
+        url: "{{ item }}"
+        method: GET
+        follow_redirects: none
+        validate_certs: true
+        return_content: false
+        timeout: "{{ url_timeout }}"
+        status_code: "{{ reachable_status_codes }}"
+      loop: "{{ urls }}"
+      loop_control:
+        label: "{{ item }}"
+      register: url_checks
+
+    - name: Report reachable endpoints
+      ansible.builtin.debug:
+        msg: "{{ item.item }} is reachable (HTTP {{ item.status }})"
+      loop: "{{ url_checks.results }}"
+      loop_control:
+        label: "{{ item.item }}"
